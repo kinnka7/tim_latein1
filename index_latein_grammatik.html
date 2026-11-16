@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#161826">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Latein">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23161826'/%3E%3Ctext x='50' y='66' font-family='Arial' font-size='46' font-weight='700' fill='%239184d9' text-anchor='middle'%3EFR%3C/text%3E%3C/svg%3E">
+<title>Latein · Tim</title>
+<style>
+:root{--bg:#161826;--card:#20233a;--card2:#2a2e4a;--text:#e9e9ed;--mute:#9397ab;--line:#3a3f5c;--accent:#9184d9;--accent-l:#d2cefd;--accent-m:#b5abfc;--accent-d:#423a6a;--bad:#75798c;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text)}
+body{font-family:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;
+  background:radial-gradient(900px 500px at 0% 0%,#2b2741,transparent 70%),var(--bg);min-height:100vh;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+#app{max-width:760px;margin:0 auto;padding:28px 20px 64px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3,h6{margin:0;font-weight:600}
+h1{font-size:clamp(30px,7vw,44px);letter-spacing:-.02em;line-height:1.1}
+h2{font-size:28px;letter-spacing:-.01em}
+h3{font-size:22px}
+h6{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+h6.acc{color:var(--accent-m)}
+p{margin:0}
+.mute{color:var(--mute)}
+.col{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.card{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 6px 18px rgba(0,0,0,.25)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:10px;padding:10px 16px;min-height:44px;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--accent)}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#14112a;font-weight:600}
+.btn.pri:hover{background:var(--accent-m)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--accent-l)}
+.btn.ghost:hover{border-color:var(--line)}
+.btn.sel{background:var(--accent);border-color:var(--accent);color:#14112a;font-weight:600}
+.btn.key{min-width:42px;padding:6px 10px;min-height:42px;font-size:18px}
+.btn.opt{width:100%;text-align:left;font-size:18px}
+.topic{text-align:left;width:100%;border:0;display:flex;flex-direction:column;gap:2px;padding:16px 20px}
+.topic b{font-size:17px;font-weight:600}
+.topic span{font-size:13px;color:var(--mute)}
+.input{font:inherit;font-size:20px;color:var(--text);background:#12142a;border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-height:46px;width:100%;max-width:100%}
+.input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.input.sm{width:min(240px,100%)}
+.input:disabled{opacity:.6}
+.hint{font-size:13px;color:var(--mute)}
+.top{display:flex;align-items:center;gap:14px}
+.prog{flex:1;height:4px;border-radius:2px;background:#3f424d}
+.prog i{display:block;height:4px;border-radius:2px;background:var(--accent);transition:width .25s}
+.main{font-size:clamp(26px,6vw,34px);line-height:1.2;font-weight:600;letter-spacing:-.015em}
+.sent{display:flex;align-items:center;flex-wrap:wrap;gap:10px;font-size:22px;line-height:1.5}
+.back{font-size:26px;color:var(--accent-l);font-weight:600}
+.fb{display:flex;align-items:center;gap:14px;padding:12px 18px;border-radius:12px;background:var(--card)}
+.fb .ic{font-size:26px;line-height:1}
+.note{font-size:14px;color:var(--accent-l)}
+.bars{display:flex;gap:32px;align-items:flex-end;margin-top:8px}
+.bar{position:relative;width:96px;display:flex;flex-direction:column;gap:6px;cursor:pointer}
+.bar .n{font-size:22px;font-weight:600}
+.bar .b{min-height:3px;border-radius:6px;transition:height .25s}
+.bar .l{font-size:13px;color:var(--mute)}
+.pop{display:none;position:absolute;left:0;bottom:calc(100% + 8px);z-index:5;min-width:190px;max-width:300px;max-height:220px;overflow:auto;padding:12px 16px;flex-direction:column;gap:4px;font-size:14px;background:var(--card2);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.pop.on,.bar:hover .pop{display:flex}
+.score{font-size:72px;line-height:1;font-weight:600;color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--mute);font-weight:500;font-size:13px}
+.tag{display:inline-block;padding:2px 12px;border-radius:99px;background:var(--accent-d);color:var(--accent-l);font-size:14px}
+.sp{height:1px;width:240px;background:linear-gradient(90deg,var(--accent),transparent)}
+.mr{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.mr span:last-child{color:var(--accent-l)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ===================== DATEN START: nur diesen Block ändern =====================
+const PAGE_TITLE = "Latein · Tim";
+const KICKER = "Latein · neue Wörter";
+const GREETING = "Salve, Tim,";
+const GRAMMAR_SUB = "Deklination und Konjugation";
+const KEY = "tim-latein-v1";  // pro App einen eigenen Namen wählen
+
+// Bereiche für die Wörter (Schlüssel 'a', 'b', ... passen zur ersten Spalte in V)
+const SRC = {"all": "Alle Wörter", "a": "Wortschatz 1", "b": "Wortschatz 2", "c": "Wortschatz 3", "d": "Wortschatz 4", "e": "Wortschatz 5", "f": "Wortschatz 6", "g": "Wortschatz 7", "h": "Wortschatz 8", "i": "Wortschatz 9", "j": "Wortschatz 10"};
+const SRCK = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+
+// Wörter: [Bereich, Wort, Deutsch, Beispielsatz mit {Lücke}, Übersetzung, Hinweis, [weitere richtige Antworten]]
+const V = [
+  ["a", "familia", "die Familie", "", "", "f", []],
+  ["a", "servus", "der Diener, der Sklave", "", "", "m", []],
+  ["a", "serva", "die Dienerin, die Sklavin", "", "", "f", []],
+  ["a", "domina", "die Herrin; die Hausherrin", "", "", "f", []],
+  ["a", "dominus", "der Herr; der Hausherr", "", "", "m", []],
+  ["a", "negotium", "die Aufgabe; das Geschäft", "", "", "n", []],
+  ["a", "est", "er/sie/es ist; es gibt/findet statt", "", "", "", []],
+  ["a", "amicus", "der Freund", "", "", "m", []],
+  ["a", "et", "und; auch", "", "", "", []],
+  ["a", "amica", "die Freundin", "", "", "f", []],
+  ["a", "ubi?", "wo?", "", "", "", []],
+  ["a", "non", "nicht", "", "", "", []],
+  ["a", "hic", "hier", "", "", "", []],
+  ["a", "properare", "eilen, sich beeilen", "", "", "", []],
+  ["a", "laborare", "arbeiten; leiden", "", "", "", []],
+  ["a", "clamare", "(laut) rufen, schreien", "", "", "", []],
+  ["a", "sedere", "sitzen, dasitzen", "", "", "", []],
+  ["a", "gaudere", "sich freuen, froh sein", "", "", "", []],
+  ["a", "sunt", "sie sind; es gibt/findet statt", "", "", "", []],
+  ["a", "nam", "denn, nämlich", "", "", "", []],
+  ["a", "etiam", "auch; sogar", "", "", "", []],
+  ["a", "ibi", "dort", "", "", "", []],
+  ["a", "debere", "müssen; schulden", "", "", "", []],
+  ["a", "nunc", "nun, jetzt", "", "", "", []],
+  ["a", "sed", "aber; sondern", "", "", "", []],
+  ["a", "cur?", "warum?", "", "", "", []],
+  ["a", "otium", "die Freizeit, die Ruhe, die Muße", "", "", "n", []],
+  ["b", "lectus", "das Bett, die Liege", "", "", "m", []],
+  ["b", "cibus", "die Speise, das Essen; die Nahrung", "", "", "m", []],
+  ["b", "cenare", "essen, speisen", "", "", "", []],
+  ["b", "vinum", "der Wein", "", "", "n", []],
+  ["b", "aqua", "das Wasser", "", "", "f", []],
+  ["b", "vocare", "rufen", "", "", "", []],
+  ["b", "quid?", "was?", "", "", "", []],
+  ["b", "ridere", "lachen (über); auslachen", "", "", "", []],
+  ["b", "imperare", "befehlen, anordnen; herrschen (über)", "", "", "", []],
+  ["b", "parere", "gehorchen, folgen", "", "", "", []],
+  ["b", "cessare", "zögern (zu tun), sich Zeit lassen", "", "", "", []],
+  ["b", "salutare", "grüßen, begrüßen", "", "", "", []],
+  ["b", "salve!", "sei gegrüßt! / grüß dich!", "", "", "", []],
+  ["b", "venire", "kommen", "", "", "", []],
+  ["b", "audire", "hören, anhören", "", "", "", []],
+  ["b", "dormire", "schlafen", "", "", "", []],
+  ["b", "desperare", "verzweifeln, die Hoffnung aufgeben", "", "", "", []],
+  ["b", "tum", "dann, darauf, da; damals", "", "", "", []],
+  ["b", "iam", "schon, bereits", "", "", "", []],
+  ["b", "subito", "plötzlich", "", "", "", []],
+  ["b", "num?", "etwa?", "", "", "", []],
+  ["b", "aperire", "öffnen; aufmachen", "", "", "", []],
+  ["b", "intrare", "betreten, eintreten (in)", "", "", "", []],
+  ["b", "non debere", "nicht müssen; nicht dürfen", "", "", "", []],
+  ["b", "salvete!", "seid gegrüßt! / grüßt euch!", "", "", "", []],
+  ["c", "verbum", "das Wort", "", "", "n", []],
+  ["c", "tacere", "still sein, schweigen, verschweigen", "", "", "", []],
+  ["c", "rogare", "fragen; bitten (um)", "", "", "", []],
+  ["c", "respondere", "antworten", "", "", "", []],
+  ["c", "docere", "lehren, beibringen, unterrichten", "", "", "", []],
+  ["c", "fabula", "die Geschichte, die Erzählung; das Theaterstück", "", "", "f", []],
+  ["c", "laudare", "loben", "", "", "", []],
+  ["c", "bene", "gut", "", "", "", []],
+  ["c", "tu", "du", "", "", "", []],
+  ["c", "amare", "lieben, (gerne) mögen", "", "", "", []],
+  ["c", "curare", "sich kümmern (um), sorgen (für); pflegen", "", "", "", []],
+  ["c", "ego", "ich", "", "", "", []],
+  ["c", "spectare", "(an)schauen, betrachten", "", "", "", []],
+  ["c", "monere", "(er)mahnen, erinnern", "", "", "", []],
+  ["c", "tandem", "endlich, schließlich", "", "", "", []],
+  ["c", "puella", "das Mädchen", "", "", "f", []],
+  ["c", "quis?", "wer?", "", "", "", []],
+  ["c", "autem", "aber, jedoch", "", "", "nachgestellt", []],
+  ["c", "semper", "immer", "", "", "", []],
+  ["c", "narrare", "erzählen, berichten", "", "", "", []],
+  ["c", "quaeso/quaesumus", "(ich) bitte / wir bitten", "", "", "", []],
+  ["c", "enim", "denn, nämlich", "", "", "nachgestellt", []],
+  ["d", "Romanus", "der Römer", "", "", "m", []],
+  ["d", "dea", "die Göttin", "", "", "f", []],
+  ["d", "deus", "der Gott", "", "", "m", []],
+  ["d", "sacrum", "das Opfer(tier), Pl. die Opferhandlung", "", "", "n", []],
+  ["d", "ara", "der Altar", "", "", "f", []],
+  ["d", "templum", "der Tempel", "", "", "n", []],
+  ["d", "ignorare", "nicht wissen, nicht kennen", "", "", "", []],
+  ["d", "non ignorare", "genau wissen, gut kennen", "", "", "", []],
+  ["d", "habere", "haben; halten", "", "", "", []],
+  ["d", "timere", "fürchten, sich fürchten; Angst haben", "", "", "", []],
+  ["d", "colere", "bebauen, pflegen; verehren", "", "", "colo", []],
+  ["d", "emere", "kaufen", "", "", "emo", []],
+  ["d", "vendere", "verkaufen", "", "", "vendo", []],
+  ["d", "dicere", "sagen, sprechen, reden", "", "", "dico", []],
+  ["d", "facere", "tun, machen, ausführen", "", "", "facio", []],
+  ["d", "sacra facere", "opfern", "", "", "", []],
+  ["d", "cupere", "wünschen (zu tun), (haben) wollen, begehren", "", "", "cupio; m. Inf.", []],
+  ["d", "novem", "neun", "", "", "", []],
+  ["d", "mille", "tausend", "", "", "", []],
+  ["d", "poscere", "fordern", "", "", "posco", []],
+  ["d", "tres", "drei", "", "", "", []],
+  ["d", "incendere", "entflammen, in Brand setzen", "", "", "incendo", []],
+  ["d", "sex", "sechs", "", "", "", []],
+  ["d", "iterum", "wiederum, ein zweites Mal", "", "", "", []],
+  ["d", "certe", "sicher, gewiss", "", "", "Adv.", []],
+  ["d", "si", "wenn, falls", "", "", "", []],
+  ["e", "theatrum", "das Theater", "", "", "n", []],
+  ["e", "videre", "sehen", "", "", "video", []],
+  ["e", "ludus", "das Spiel; die Schule, Pl. die (Zirkus-)Spiele", "", "", "m", []],
+  ["e", "incipere", "anfangen, beginnen", "", "", "incipio", []],
+  ["e", "filius", "der Sohn", "", "", "m", []],
+  ["e", "effugere", "(jemandem) entkommen", "", "", "effugio; m. Akk.", []],
+  ["e", "mercator", "der Händler, der Kaufmann", "", "", "m", []],
+  ["e", "senator", "der Senator", "", "", "m", []],
+  ["e", "gladiator", "der Gladiator", "", "", "m", []],
+  ["e", "fur", "der Dieb / die Diebin", "", "", "m/f", []],
+  ["e", "clamor", "der Schrei; das Geschrei; der Lärm", "", "", "m", []],
+  ["e", "esse", "sein", "", "", "sum", []],
+  ["e", "adesse", "da sein; helfen", "", "", "adsum", []],
+  ["e", "abesse", "fort sein, weg sein; fehlen", "", "", "absum", []],
+  ["e", "retinere", "zurückhalten, behalten, festhalten", "", "", "retineo", []],
+  ["e", "turba", "die (Menschen-)Menge; das Durcheinander, das Gedränge", "", "", "f", []],
+  ["e", "amor", "die Liebe", "", "", "m", []],
+  ["e", "dolor", "der Schmerz", "", "", "m", []],
+  ["e", "vita", "das Leben, die Lebensweise", "", "", "f", []],
+  ["e", "bestia", "das (wilde) Tier", "", "", "f", []],
+  ["e", "liberi", "die Kinder", "", "", "m (Pl.)", []],
+  ["e", "porta", "die Tür, das Tor, der Eingang", "", "", "f", []],
+  ["e", "claudere", "schließen, einschließen, versperren", "", "", "claudo", []],
+  ["e", "non iam", "nicht mehr", "", "", "", []],
+  ["f", "forum", "das Forum, der (Markt-)Platz, das Stadtzentrum", "", "", "n", []],
+  ["f", "occurrere", "entgegenlaufen, -treten, begegnen", "", "", "occurro", []],
+  ["f", "orator", "der Redner", "", "", "m", []],
+  ["f", "flamma", "die Flamme", "", "", "f", []],
+  ["f", "me", "mich", "", "", "Akk.", []],
+  ["f", "fugere", "fliehen (vor); meiden", "", "", "fugio; m. Akk.", []],
+  ["f", "locus", "der Ort, der Platz, die Stelle", "", "", "m", []],
+  ["f", "dare", "geben", "", "", "do", []],
+  ["f", "locum dare", "Platz machen", "", "", "", []],
+  ["f", "appropinquare", "sich nähern, näher kommen", "", "", "appropinquo", []],
+  ["f", "relinquere", "verlassen, zurücklassen", "", "", "relinquo", []],
+  ["f", "agere", "tun; handeln, verhandeln; treiben", "", "", "ago", []],
+  ["f", "negotia agere", "Geschäfte betreiben", "", "", "", []],
+  ["f", "bestiam agere", "ein (wildes) Tier treiben", "", "", "", []],
+  ["f", "fabulam agere", "ein (Theater-)Stück aufführen", "", "", "", []],
+  ["f", "quid agis?", "wie geht es dir?", "", "", "", []],
+  ["f", "vitam agere", "sein Leben verbringen", "", "", "", []],
+  ["f", "mittere", "schicken; loslassen, laufen lassen; werfen", "", "", "mitto", []],
+  ["f", "posse", "können; vermögen", "", "", "possum", []],
+  ["f", "nondum", "noch nicht", "", "", "", []],
+  ["f", "exspectare", "warten (auf), erwarten", "", "", "exspecto", []],
+  ["f", "statim", "sofort, auf der Stelle", "", "", "", []],
+  ["f", "resistere", "sich widersetzen, Widerstand leisten", "", "", "resisto", []],
+  ["f", "adhuc", "bis jetzt, immer noch", "", "", "", []],
+  ["f", "explicare", "erklären", "", "", "explico", []],
+  ["f", "nuper", "neulich", "", "", "", []],
+  ["g", "signum", "das Zeichen; das Feldzeichen", "", "", "n", []],
+  ["g", "vincere", "siegen, besiegen", "", "", "vinco", []],
+  ["g", "praemium", "die Belohnung, der Lohn; der Preis", "", "", "n", []],
+  ["g", "honor", "die Ehre; das Ehrenamt", "", "", "m", []],
+  ["g", "studere", "sich bemühen, (tun) wollen; sich (wissenschaftlich) beschäftigen mit, studieren", "", "", "studeo", []],
+  ["g", "vincere studere", "siegen wollen", "", "", "", []],
+  ["g", "amico studere", "sich um den Freund bemühen", "", "", "", []],
+  ["g", "vix", "kaum, nur mit Mühe", "", "", "", []],
+  ["g", "equus", "das Pferd", "", "", "m", []],
+  ["g", "frustra", "vergeblich, umsonst", "", "", "", []],
+  ["g", "denique", "schließlich", "", "", "", []],
+  ["g", "petere", "(er)bitten; verlangen, streben nach, erreichen wollen; aufsuchen; angreifen", "", "", "peto", []],
+  ["g", "senex", "der alte Mann, der Greis", "", "", "senis m", []],
+  ["g", "adulescens", "der Jugendliche, der junge Mann", "", "", "adulescentis m; Gen. Pl. adulescentium", []],
+  ["g", "vox", "die Stimme; das Wort", "", "", "vocis f", []],
+  ["g", "credere", "glauben; vertrauen", "", "", "credo", []],
+  ["g", "incendium", "der Brand, das Feuer", "", "", "-i n", []],
+  ["g", "auctor", "der Urheber, der Gründer, der Schriftsteller", "", "", "auctoris m", []],
+  ["g", "taberna", "der Laden; das Wirtshaus", "", "", "-ae f", []],
+  ["g", "forte", "zufällig", "", "", "", []],
+  ["g", "intellegere", "erkennen, verstehen", "", "", "intellego", []],
+  ["g", "comprehendere", "ergreifen, festnehmen; erfassen", "", "", "comprehendo", []],
+  ["g", "servare", "retten (vor); bewahren, beschützen", "", "", "servo", []],
+  ["g", "sollicitare", "beunruhigen, erregen", "", "", "sollicito", []],
+  ["g", "convincere", "überführen", "", "", "convinco", []],
+  ["h", "gaudium", "die Freude", "", "", "-i n", []],
+  ["h", "gladius", "das Schwert", "", "", "-i m", []],
+  ["h", "arma", "die Waffen", "", "", "-orum (Pl.)", []],
+  ["h", "supplicium", "die Strafe, die Todesstrafe, die Hinrichtung; das Gebet", "", "", "-i n", []],
+  ["h", "populus", "das Volk", "", "", "-i m", []],
+  ["h", "exercere", "üben, trainieren", "", "", "exerceo", []],
+  ["h", "se exercere", "sich üben, trainieren", "", "", "", []],
+  ["h", "carere", "entbehren, nicht haben; frei sein (von)", "", "", "careo", []],
+  ["h", "ferrum", "das Eisen; die Waffe, das Schwert", "", "", "-i n", []],
+  ["h", "liberare", "befreien", "", "", "libero", []],
+  ["h", "servum liberare", "einen Sklaven freilassen", "", "", "", []],
+  ["h", "se", "sich", "", "", "Akk.", []],
+  ["h", "afficere", "versehen (mit)", "", "", "afficio; m. Abl.", []],
+  ["h", "doloribus afficere", "Schmerzen zufügen", "", "", "", []],
+  ["h", "gaudio afficere", "erfreuen", "", "", "", []],
+  ["h", "honore afficere", "Ehre erweisen", "", "", "", []],
+  ["h", "supplicio afficere", "hinrichten", "", "", "", []],
+  ["h", "licet", "es ist (jemandem) möglich (, zu tun); es ist (jemandem) erlaubt (, zu tun)", "", "", "m. Dat. und Inf.", []],
+  ["h", "solum", "nur", "", "", "", []],
+  ["h", "non solum ..., sed etiam ...", "nicht nur ..., sondern auch ...", "", "", "", []],
+  ["h", "quoque", "auch", "", "", "nachgestellt", []],
+  ["h", "recreare", "erholen", "", "", "recreo", []],
+  ["h", "se recreare", "sich erholen", "", "", "", []],
+  ["h", "corpus", "der Körper; der Leichnam", "", "", "corporis n", []],
+  ["h", "raro", "selten", "", "", "Adv.", []],
+  ["h", "vulnus", "die Wunde", "", "", "vulneris n", []],
+  ["h", "vulnus curare", "eine Wunde behandeln", "", "", "", []],
+  ["h", "labor", "die Arbeit, die Mühe", "", "", "laboris m", []],
+  ["h", "domum", "heim, nach Hause", "", "", "", []],
+  ["h", "decedere", "(weg-)gehen; sterben", "", "", "decedo", []],
+  ["i", "vestis", "das Kleid, die Kleidung", "", "", "vestis f; Gen. Pl. vestium", []],
+  ["i", "tunica", "die Tunika", "", "", "-ae f", []],
+  ["i", "toga", "die Toga", "", "", "-ae f", []],
+  ["i", "consul", "der Konsul", "", "", "-is m", []],
+  ["i", "currere", "laufen, rennen", "", "", "curro", []],
+  ["i", "habitare", "wohnen, bewohnen", "", "", "habito", []],
+  ["i", "de", "von ... herab; von, über; um/wegen", "", "", "m. Abl.", []],
+  ["i", "de amico narrare", "vom/über den Freund erzählen", "", "", "", []],
+  ["i", "de amicis timere", "um die Freunde Angst haben", "", "", "", []],
+  ["i", "ad", "zu (... hin); bei, an", "", "", "m. Akk.", []],
+  ["i", "per", "durch (... hindurch)", "", "", "m. Akk.", []],
+  ["i", "post", "nach; hinter", "", "", "m. Akk.", []],
+  ["i", "e/ex", "aus, aus ... heraus; von ... her", "", "", "m. Abl.", []],
+  ["i", "super", "über", "", "", "m. Akk.", []],
+  ["i", "cum", "(zusammen) mit", "", "", "m. Abl.", []],
+  ["i", "sine", "ohne", "", "", "m. Abl.", []],
+  ["i", "in", "in; auf; nach; gegen (wohin?); in, an, auf, bei (wo?)", "", "", "m. Akk. / m. Abl.", []],
+  ["i", "sub", "unter (wohin?); unter (wo?)", "", "", "m. Akk. / m. Abl.", []],
+  ["i", "stare", "stehen, dastehen", "", "", "sto", []],
+  ["i", "sermo", "das Gespräch; die Sprache", "", "", "sermonis m", []],
+  ["i", "sermonem habere", "ein Gespräch führen (mit)", "", "", "cum", []],
+  ["i", "abdere", "verstecken, verbergen", "", "", "abdo", []],
+  ["i", "oculus", "das Auge", "", "", "-i m", []],
+  ["i", "amittere", "verlieren", "", "", "amitto", []],
+  ["i", "vicus", "die Gasse; das Dorf", "", "", "-i m", []],
+  ["i", "plebs", "das (einfache) Volk", "", "", "plebis f", []],
+  ["i", "pecunia", "das Geld", "", "", "-ae f", []],
+  ["i", "timor", "die Angst, die Furcht", "", "", "timoris m", []],
+  ["i", "mutare", "ändern, wechseln, verwandeln", "", "", "muto", []],
+  ["i", "in lectum se abdere", "sich im Bett verstecken", "", "", "", []],
+  ["j", "possidere", "besitzen", "", "", "possideo", []],
+  ["j", "donum", "das Geschenk", "", "", "-i n", []],
+  ["j", "poena", "die Strafe", "", "", "-ae f", []],
+  ["j", "poena/poenis afficere", "bestrafen", "", "", "", []],
+  ["j", "studium", "die Bemühung, das Streben; die (wissenschaftliche) Beschäftigung", "", "", "-i n", []],
+  ["j", "a/ab", "von, von ... her, von ... weg", "", "", "m. Abl.", []],
+  ["j", "nihil", "nichts", "", "", "", []],
+  ["j", "convenire", "passen; zusammenkommen; treffen", "", "", "convenio", []],
+  ["j", "amicam convenire", "eine Freundin treffen", "", "", "", []],
+  ["j", "amicae convenit", "es passt (zu) der Freundin", "", "", "", []],
+  ["j", "in tabernam convenire", "im Wirtshaus zusammenkommen", "", "", "", []],
+  ["j", "parentes", "die Eltern", "", "", "parent(i)um m (Pl.)", []],
+  ["j", "libertas", "die Freiheit", "", "", "libertatis f", []],
+];
+
+// Grammatik: eine Zeile pro Aufgabe.  Satz mit ___ | richtige Antwort | Auswahl (nur bei Auswahlaufgaben, mit / getrennt)
+const G = {
+  nomina: { name: "Nomina: Kasus und Numerus", sub: "Nominativ, Genitiv, Dativ, Akkusativ, Ablativ; Singular und Plural", rows: `
+Wer oder was? ___|Nominativ
+Wessen? ___|Genitiv
+Wem? ___|Dativ
+Wen oder was? ___|Akkusativ
+Womit oder wodurch? ___|Ablativ
+Einzahl auf Latein: ___|Singular
+Mehrzahl auf Latein: ___|Plural
+Subjekt: Welcher Kasus? ___|Nominativ
+Direktes Objekt: Welcher Kasus? ___|Akkusativ
+Besitzverhältnis: Welcher Kasus? ___|Genitiv
+` },
+  adecl: { name: "Substantive: a-Deklination", sub: "domina, -ae f", rows: `
+domina, Nom. Sg.: ___|domina
+domina, Gen. Sg.: ___|dominae
+domina, Dat. Sg.: ___|dominae
+domina, Akk. Sg.: ___|dominam
+domina, Abl. Sg.: ___|domina
+domina, Nom. Pl.: ___|dominae
+domina, Gen. Pl.: ___|dominarum
+domina, Dat. Pl.: ___|dominis
+domina, Akk. Pl.: ___|dominas
+domina, Abl. Pl.: ___|dominis
+` },
+  odecl: { name: "Substantive: o-Deklination", sub: "dominus, -i m und templum, -i n", rows: `
+dominus / templum, dominus Nom. Sg.: ___|dominus
+dominus / templum, dominus Gen. Sg.: ___|domini
+dominus / templum, dominus Dat. Sg.: ___|domino
+dominus / templum, dominus Akk. Sg.: ___|dominum
+dominus / templum, dominus Abl. Sg.: ___|domino
+dominus / templum, dominus Nom. Pl.: ___|domini
+dominus / templum, dominus Gen. Pl.: ___|dominorum
+dominus / templum, dominus Akk. Pl.: ___|dominos
+dominus / templum, templum Nom. Sg.: ___|templum
+dominus / templum, templum Akk. Pl.: ___|templa
+dominus / templum, templum Gen. Pl.: ___|templorum
+` },
+  thirddecl: { name: "Substantive: 3. Deklination", sub: "rex, regis; vox, vocis; corpus, corporis", rows: `
+3. Deklination, rex Gen. Sg.: ___|regis
+3. Deklination, rex Dat. Sg.: ___|regi
+3. Deklination, rex Akk. Sg.: ___|regem
+3. Deklination, rex Abl. Sg.: ___|rege
+3. Deklination, rex Nom. Pl.: ___|reges
+3. Deklination, rex Gen. Pl.: ___|regum
+3. Deklination, rex Dat. Pl.: ___|regibus
+3. Deklination, vox Gen. Sg.: ___|vocis
+3. Deklination, vox Akk. Sg.: ___|vocem
+3. Deklination, corpus Gen. Sg.: ___|corporis
+3. Deklination, corpus Nom. Pl.: ___|corpora
+3. Deklination, corpus Akk. Pl.: ___|corpora
+` },
+  adjectives: { name: "Adjektive: bonus und pulcher", sub: "a-/o-Deklination und Kongruenz", rows: `
+bonus / pulcher, bonus Nom. Sg. f: ___|bona
+bonus / pulcher, bonus Nom. Sg. n: ___|bonum
+bonus / pulcher, bonus Gen. Sg. m: ___|boni
+bonus / pulcher, bonus Akk. Sg. m: ___|bonum
+bonus / pulcher, bonus Abl. Sg. f: ___|bona
+bonus / pulcher, bonus Nom. Pl. m: ___|boni
+bonus / pulcher, bonus Nom. Pl. n: ___|bona
+bonus / pulcher, bonus Akk. Pl. f: ___|bonas
+bonus / pulcher, pulcher Nom. Sg. f: ___|pulchra
+bonus / pulcher, pulcher Nom. Sg. n: ___|pulchrum
+bonus / pulcher, pulcher Gen. Sg. m: ___|pulchri
+bonus / pulcher, pulcher Akk. Pl. m: ___|pulchros
+` },
+  personal: { name: "Personalpronomen", sub: "ego, tu, se; Kasusformen", rows: `
+Personalpronomen, ich (Nom.): ___|ego
+Personalpronomen, du (Nom.): ___|tu
+Personalpronomen, mich (Akk.): ___|me
+Personalpronomen, dich (Akk.): ___|te
+Personalpronomen, mir (Dat.): ___|mihi
+Personalpronomen, dir (Dat.): ___|tibi
+Personalpronomen, uns (Akk.): ___|nos
+Personalpronomen, euch (Akk.): ___|vos
+Personalpronomen, sich (Akk.): ___|se
+Personalpronomen, unser (Gen.): ___|nostri/nostrum
+Personalpronomen, euer (Gen.): ___|vestri/vestrum
+` },
+  possessive: { name: "Possessivpronomen", sub: "meus, tuus, suus, noster, vester", rows: `
+Possessivpronomen, mein (m. Nom. Sg.): ___|meus
+Possessivpronomen, meine (f. Nom. Sg.): ___|mea
+Possessivpronomen, mein (n. Nom. Sg.): ___|meum
+Possessivpronomen, dein (m. Nom. Sg.): ___|tuus
+Possessivpronomen, deine (f. Nom. Sg.): ___|tua
+Possessivpronomen, sein/ihr eigenes (m. Nom. Sg.): ___|suus
+Possessivpronomen, unser (m. Nom. Sg.): ___|noster
+Possessivpronomen, unsere (f. Nom. Sg.): ___|nostra
+Possessivpronomen, euer (m. Nom. Sg.): ___|vester
+Possessivpronomen, eure (f. Nom. Sg.): ___|vestra
+` },
+  demonstrative: { name: "Demonstrativpronomen", sub: "hic, haec, hoc; is, ea, id; ille, illa, illud", rows: `
+Demonstrativpronomen, hic Nom. Sg. f: ___|haec
+Demonstrativpronomen, hic Nom. Sg. n: ___|hoc
+Demonstrativpronomen, hic Akk. Sg. m: ___|hunc
+Demonstrativpronomen, hic Akk. Sg. f: ___|hanc
+Demonstrativpronomen, hic Gen. Sg.: ___|huius
+Demonstrativpronomen, hic Dat. Sg.: ___|huic
+Demonstrativpronomen, is Nom. Sg. f: ___|ea
+Demonstrativpronomen, is Nom. Sg. n: ___|id
+Demonstrativpronomen, is Akk. Sg. m: ___|eum
+Demonstrativpronomen, ille Nom. Sg. f: ___|illa
+Demonstrativpronomen, ille Nom. Sg. n: ___|illud
+Demonstrativpronomen, ille Gen. Sg.: ___|illius
+` },
+  relative: { name: "Relativpronomen", sub: "qui, quae, quod", rows: `
+qui, quae, quod, Nom. Sg. m: ___|qui
+qui, quae, quod, Nom. Sg. f: ___|quae
+qui, quae, quod, Nom. Sg. n: ___|quod
+qui, quae, quod, Gen. Sg.: ___|cuius
+qui, quae, quod, Dat. Sg.: ___|cui
+qui, quae, quod, Akk. Sg. m: ___|quem
+qui, quae, quod, Akk. Sg. f: ___|quam
+qui, quae, quod, Abl. Sg. m: ___|quo
+qui, quae, quod, Nom. Pl. m: ___|qui
+qui, quae, quod, Nom. Pl. f: ___|quae
+qui, quae, quod, Gen. Pl.: ___|quorum/quarum
+qui, quae, quod, Dat. Pl.: ___|quibus
+` },
+  indefinite: { name: "Indefinitpronomen", sub: "nemo, nihil, nullus, quisquam", rows: `
+Indefinitpronomen, niemand (Nom.): ___|nemo
+Indefinitpronomen, niemanden (Akk.): ___|neminem
+Indefinitpronomen, niemandem (Dat.): ___|nemini
+Indefinitpronomen, nichts (Nom.): ___|nihil
+Indefinitpronomen, keiner (m. Nom. Sg.): ___|nullus
+Indefinitpronomen, keine (f. Nom. Sg.): ___|nulla
+Indefinitpronomen, kein (n. Nom. Sg.): ___|nullum
+Indefinitpronomen, irgendjemand (Nom.): ___|quisquam
+Indefinitpronomen, irgendetwas (Nom.): ___|quidquam
+Indefinitpronomen, keines (Gen. Sg.): ___|nullius
+` },
+  numerals: { name: "Numeralia", sub: "unus, duo, tres; Grund- und Ordnungszahlen", rows: `
+Zahlen, 1: ___|unus
+Zahlen, 2: ___|duo
+Zahlen, 3: ___|tres
+Zahlen, 4: ___|quattuor
+Zahlen, 5: ___|quinque
+Zahlen, 6: ___|sex
+Zahlen, 7: ___|septem
+Zahlen, 8: ___|octo
+Zahlen, 9: ___|novem
+Zahlen, 10: ___|decem
+Zahlen, 100: ___|centum
+Zahlen, 1000: ___|mille
+` },
+  prepositions: { name: "Präpositionen", sub: "mit Akkusativ, Ablativ oder beiden", rows: `
+mit (Abl.): ___|cum
+ohne (Abl.): ___|sine
+zu, nach (Akk.): ___|ad
+durch (Akk.): ___|per
+nach, hinter (Akk.): ___|post
+aus, heraus aus (Abl.): ___|ex/e
+von, weg von (Abl.): ___|ab/a
+über (Akk.): ___|super
+in ... hinein (Akk.): ___|in
+in, auf (Ort, Abl.): ___|in
+unter ... hin (Akk.): ___|sub
+unter (Ort, Abl.): ___|sub
+` },
+  conjunctions: { name: "Konjunktionen", sub: "Beiordnung und Unterordnung", rows: `
+und: ___|et
+und auch: ___|atque/ac
+aber, jedoch: ___|sed
+denn, nämlich: ___|nam
+oder: ___|aut
+weder ... noch: ___|neque ... neque
+nicht nur ... sondern auch: ___|non solum ... sed etiam
+sowohl ... als auch: ___|et ... et
+weil: ___|quia/quod
+obwohl: ___|quamquam
+wenn, falls: ___|si
+wenn nicht, außer wenn: ___|nisi
+` },
+  subjunctions: { name: "Subjunktionen", sub: "cum, ut, ne, dum, postquam", rows: `
+als, nachdem (mit Ind.): ___|cum
+da, weil (mit Konj.): ___|cum
+obwohl (mit Konj.): ___|cum
+damit (final): ___|ut
+damit nicht (final): ___|ne
+sobald: ___|ubi/ut
+während: ___|dum
+nachdem: ___|postquam
+obwohl: ___|quamquam
+wenn: ___|si
+` },
+  intro: { name: "Einleitende Wörter: mehrere Bedeutungen", sub: "cum, ne, quam, quo, quod, ubi, ut", rows: `
+___ = als (damals) oder weil (je nach Modus).|cum
+___ = dass nicht / damit nicht.|ne
+___ = die, welche (Akk. Sg. f).|quam
+___ = als, wie (Vergleich).|quam
+___ = durch den, durch welchen (Abl. Sg. m/n).|quo
+___ = wohin, dorthin (relativer Satzanschluss).|quo
+___ = das, welches (Nom./Akk. Sg. n).|quod
+___ = weil oder dass (mit Ind.).|quod
+___ = wo? oder sobald.|ubi
+___ = damit, dass oder wie.|ut
+` },
+  present: { name: "Verben: Präsens Aktiv", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|voco
+vocare, 2. Sg.: ___|vocas
+vocare, 3. Sg.: ___|vocat
+vocare, 1. Pl.: ___|vocamus
+vocare, 2. Pl.: ___|vocatis
+vocare, 3. Pl.: ___|vocant
+vocare, 1. Sg. (Auswahl): ___|voco|voco/vocas
+vocare, 2. Sg. (Auswahl): ___|vocas|vocas/vocat
+vocare, 3. Sg. (Auswahl): ___|vocat|vocat/vocamus
+vocare, 1. Pl. (Auswahl): ___|vocamus|vocamus/vocatis
+` },
+  imperfect: { name: "Verben: Imperfekt Aktiv", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|vocabam
+vocare, 2. Sg.: ___|vocabas
+vocare, 3. Sg.: ___|vocabat
+vocare, 1. Pl.: ___|vocabamus
+vocare, 2. Pl.: ___|vocabatis
+vocare, 3. Pl.: ___|vocabant
+vocare, 1. Sg. (Auswahl): ___|vocabam|vocabam/vocabas
+vocare, 2. Sg. (Auswahl): ___|vocabas|vocabas/vocabat
+vocare, 3. Sg. (Auswahl): ___|vocabat|vocabat/vocabamus
+vocare, 1. Pl. (Auswahl): ___|vocabamus|vocabamus/vocabatis
+` },
+  future: { name: "Verben: Futur I Aktiv", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|vocabo
+vocare, 2. Sg.: ___|vocabis
+vocare, 3. Sg.: ___|vocabit
+vocare, 1. Pl.: ___|vocabimus
+vocare, 2. Pl.: ___|vocabitis
+vocare, 3. Pl.: ___|vocabunt
+vocare, 1. Sg. (Auswahl): ___|vocabo|vocabo/vocabis
+vocare, 2. Sg. (Auswahl): ___|vocabis|vocabis/vocabit
+vocare, 3. Sg. (Auswahl): ___|vocabit|vocabit/vocabimus
+vocare, 1. Pl. (Auswahl): ___|vocabimus|vocabimus/vocabitis
+` },
+  subjimp: { name: "Verben: Konjunktiv Imperfekt", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|vocarem
+vocare, 2. Sg.: ___|vocares
+vocare, 3. Sg.: ___|vocaret
+vocare, 1. Pl.: ___|vocaremus
+vocare, 2. Pl.: ___|vocaretis
+vocare, 3. Pl.: ___|vocarent
+vocare, 1. Sg. (Auswahl): ___|vocarem|vocarem/vocares
+vocare, 2. Sg. (Auswahl): ___|vocares|vocares/vocaret
+vocare, 3. Sg. (Auswahl): ___|vocaret|vocaret/vocaremus
+vocare, 1. Pl. (Auswahl): ___|vocaremus|vocaremus/vocaretis
+` },
+  perfect: { name: "Verben: Perfekt Aktiv", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|vocavi
+vocare, 2. Sg.: ___|vocavisti
+vocare, 3. Sg.: ___|vocavit
+vocare, 1. Pl.: ___|vocavimus
+vocare, 2. Pl.: ___|vocavistis
+vocare, 3. Pl.: ___|vocaverunt
+vocare, 1. Sg. (Auswahl): ___|vocavi|vocavi/vocavisti
+vocare, 2. Sg. (Auswahl): ___|vocavisti|vocavisti/vocavit
+vocare, 3. Sg. (Auswahl): ___|vocavit|vocavit/vocavimus
+vocare, 1. Pl. (Auswahl): ___|vocavimus|vocavimus/vocavistis
+` },
+  pluperfect: { name: "Verben: Plusquamperfekt Aktiv", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|vocaveram
+vocare, 2. Sg.: ___|vocaveras
+vocare, 3. Sg.: ___|vocaverat
+vocare, 1. Pl.: ___|vocaveramus
+vocare, 2. Pl.: ___|vocaveratis
+vocare, 3. Pl.: ___|vocaverant
+vocare, 1. Sg. (Auswahl): ___|vocaveram|vocaveram/vocaveras
+vocare, 2. Sg. (Auswahl): ___|vocaveras|vocaveras/vocaverat
+vocare, 3. Sg. (Auswahl): ___|vocaverat|vocaverat/vocaveramus
+vocare, 1. Pl. (Auswahl): ___|vocaveramus|vocaveramus/vocaveratis
+` },
+  future2: { name: "Verben: Futur II Aktiv", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|vocavero
+vocare, 2. Sg.: ___|vocaveris
+vocare, 3. Sg.: ___|vocaverit
+vocare, 1. Pl.: ___|vocaverimus
+vocare, 2. Pl.: ___|vocaveritis
+vocare, 3. Pl.: ___|vocaverint
+vocare, 1. Sg. (Auswahl): ___|vocavero|vocavero/vocaveris
+vocare, 2. Sg. (Auswahl): ___|vocaveris|vocaveris/vocaverit
+vocare, 3. Sg. (Auswahl): ___|vocaverit|vocaverit/vocaverimus
+vocare, 1. Pl. (Auswahl): ___|vocaverimus|vocaverimus/vocaveritis
+` },
+  passive: { name: "Verben: Präsens Passiv", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|vocor
+vocare, 2. Sg.: ___|vocaris
+vocare, 3. Sg.: ___|vocatur
+vocare, 1. Pl.: ___|vocamur
+vocare, 2. Pl.: ___|vocamini
+vocare, 3. Pl.: ___|vocantur
+vocare, 1. Sg. (Auswahl): ___|vocor|vocor/vocaris
+vocare, 2. Sg. (Auswahl): ___|vocaris|vocaris/vocatur
+vocare, 3. Sg. (Auswahl): ___|vocatur|vocatur/vocamur
+vocare, 1. Pl. (Auswahl): ___|vocamur|vocamur/vocamini
+` },
+  passimp: { name: "Verben: Imperfekt Passiv", sub: "a-Konjugation; Formen nach der Tabelle", rows: `
+vocare, 1. Sg.: ___|vocabar
+vocare, 2. Sg.: ___|vocabaris
+vocare, 3. Sg.: ___|vocabatur
+vocare, 1. Pl.: ___|vocabamur
+vocare, 2. Pl.: ___|vocabamini
+vocare, 3. Pl.: ___|vocabantur
+vocare, 1. Sg. (Auswahl): ___|vocabar|vocabar/vocabaris
+vocare, 2. Sg. (Auswahl): ___|vocabaris|vocabaris/vocabatur
+vocare, 3. Sg. (Auswahl): ___|vocabatur|vocabatur/vocabamur
+vocare, 1. Pl. (Auswahl): ___|vocabamur|vocabamur/vocabamini
+` },
+  conjugations: { name: "Verben: Konjugationsklassen", sub: "a-, e-, i- und konsonantische Konjugation", rows: `
+vocare, 1. Sg. Präs.: ___|voco
+monere, 1. Sg. Präs.: ___|moneo
+audire, 1. Sg. Präs.: ___|audio
+agere, 1. Sg. Präs.: ___|ago
+capere, 1. Sg. Präs.: ___|capio
+vocare, 3. Pl. Präs.: ___|vocant
+monere, 3. Pl. Präs.: ___|monent
+audire, 3. Pl. Präs.: ___|audiunt
+agere, 3. Pl. Präs.: ___|agunt
+capere, 3. Pl. Präs.: ___|capiunt
+` },
+  imperative: { name: "Verben: Imperativ und PPA", sub: "Imperativ Singular/Plural; Partizip Präsens Aktiv", rows: `
+vocare, Imperativ Sg.: ___|voca
+vocare, Imperativ Pl.: ___|vocate
+monere, Imperativ Sg.: ___|mone
+monere, Imperativ Pl.: ___|monete
+audire, Imperativ Sg.: ___|audi
+audire, Imperativ Pl.: ___|audite
+agere, Imperativ Sg.: ___|age
+agere, Imperativ Pl.: ___|agite
+capere, Imperativ Sg.: ___|cape
+capere, Imperativ Pl.: ___|capite
+vocare, PPA Nom. Sg.: ___|vocans
+monere, PPA Nom. Sg.: ___|monens
+` },
+  esse: { name: "Sonderkonjugationen: esse, posse", sub: "sein und können", rows: `
+esse, 1. Sg. Präs.: ___|sum
+esse, 2. Sg. Präs.: ___|es
+esse, 3. Sg. Präs.: ___|est
+esse, 1. Pl. Präs.: ___|sumus
+esse, 3. Pl. Präs.: ___|sunt
+esse, 1. Sg. Imperf.: ___|eram
+esse, 3. Sg. Futur I: ___|erit
+posse, 1. Sg. Präs.: ___|possum
+posse, 2. Sg. Präs.: ___|potes
+posse, 3. Sg. Präs.: ___|potest
+posse, 1. Pl. Präs.: ___|possumus
+posse, 3. Pl. Präs.: ___|possunt
+` },
+  velle: { name: "Sonderkonjugationen: velle, nolle, malle", sub: "wollen, nicht wollen, lieber wollen", rows: `
+velle, 1. Sg. Präs.: ___|volo
+velle, 2. Sg. Präs.: ___|vis
+velle, 3. Sg. Präs.: ___|vult
+velle, 1. Pl. Präs.: ___|volumus
+velle, 3. Pl. Präs.: ___|volunt
+nolle, 1. Sg. Präs.: ___|nolo
+nolle, 2. Sg. Präs.: ___|non vis
+nolle, 3. Sg. Präs.: ___|non vult
+nolle, 3. Pl. Präs.: ___|nolunt
+malle, 1. Sg. Präs.: ___|malo
+malle, 2. Sg. Präs.: ___|mavis
+malle, 3. Sg. Präs.: ___|mavult
+` },
+  mix: { name: "Gemischt", sub: "alle Themen durcheinander", rows: 'ALLE' },
+};
+// ===================== DATEN ENDE =====================
+
+document.title = PAGE_TITLE;
+const WORDS = V.map(([u, fr, de, ex, exde, note, alt]) => { const m = (ex || '').match(/\{(.+?)\}/); return { u, fr, de, ex: ex ? ex.replace(/[{}]/g, '') : '', exde: exde || '', note: note || '', alt: alt || [], gap: m ? m[1] : null, before: m ? ex.slice(0, m.index) : '', after: m ? ex.slice(m.index + m[0].length) : '' }; });
+if (G.mix && G.mix.rows.trim() === 'ALLE') G.mix.rows = Object.keys(G).filter(k => k !== 'mix').map(k => G[k].rows).join('\n');
+const GR = {}; Object.keys(G).forEach(k => GR[k] = G[k].rows.split('\n').map(l => l.trim()).filter(Boolean).map(l => { const [s, a, o] = l.split('|'); return { s, a: a.split('/').map(x => x.trim()), o: o ? o.split('/').map(x => x.trim()) : null }; }));
+const LANGDE = 'Latein', PH = 'Latein', CHARS = [];
+const base = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[’‘`´]/g, "'").replace(/\(.*?\)/g, '').replace(/[.!?,;:]/g, '').replace(/\s+/g, ' ').trim();   // Längenstriche (ā ē ī ō ū) sind egal
+const gn = base;
+const wn = base;
+
+
+
+const FMT = { cards: 'Karten', type: 'Eintippen', fill: 'Lückensatz' };
+const FMTHINT = { cards: 'Deutsches Wort sehen, ' + LANGDE + ' erinnern, umdrehen.', type: 'Deutsches Wort sehen, ' + LANGDE + ' eintippen. Ein falscher Buchstabe zählt als Fehler.', fill: 'Lücke im Beispielsatz füllen. Ein falscher Buchstabe zählt als Fehler.' };
+
+const shuf = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const wAns = (w, fmt) => (fmt === 'fill' && w.gap ? [w.gap] : [w.fr].concat(w.alt)).map(wn).filter(Boolean);
+
+function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.words) return s; } catch (e) {} return { words: {}, gram: {}, hist: [] }; }
+function persist() { try { localStorage.setItem(KEY, JSON.stringify(S.store)); } catch (e) {} }
+const S = { screen: 'home', wSrc: 'all', wN: 15, wFmt: 'cards', sess: null, open: null, store: load() };
+const acc = r => { const n = r.ok + r.bad; return n ? Math.round(r.ok / n * 100) + ' %' : '–'; };
+
+function pool(src, fmt) {
+  const w = S.store.words;
+  let p = WORDS.filter(x => src === 'all' || src === 'err' || x.u === src);
+  if (src === 'err') p = p.filter(x => w[x.fr] && w[x.fr].last === 0);
+  if (fmt === 'fill') p = p.filter(x => x.gap);
+  return p;
+}
+function go(screen) { S.screen = screen; S.open = null; if (screen !== 'play' && screen !== 'result') S.sess = null; render(); window.scrollTo(0, 0); }
+function startW(src, fmt) {
+  src = src || S.wSrc; fmt = fmt || S.wFmt;
+  const w = S.store.words;
+  const pr = x => { const r = w[x.fr]; return !r ? 1 : r.last === 0 ? 0 : 2; };
+  const items = shuf(pool(src, fmt)).sort((a, b) => pr(a) - pr(b)).slice(0, S.wN >= 999 ? 999 : S.wN);
+  if (!items.length) return;
+  S.sess = { kind: 'w', fmt, src, items, i: 0, checked: false, ok: null, flipped: false, log: [] };
+  go('play');
+}
+function startG(key) { S.sess = { kind: 'g', fmt: 'gram', topic: key, items: shuf(GR[key]), i: 0, checked: false, ok: null, log: [] }; go('play'); }
+function record(id, ok, kind) {
+  const t = kind === 'w' ? S.store.words : S.store.gram;
+  const r = t[id] || (t[id] = { ok: 0, bad: 0, last: 1 });
+  ok ? r.ok++ : r.bad++; r.last = ok ? 1 : 0; persist();
+}
+function finish(log) {
+  const s = S.sess; const ok = log.filter(x => x.ok).length;
+  const label = s.kind === 'w' ? 'Wortschatz · ' + (s.src === 'err' ? 'Fehlerwörter' : SRC[s.src] || '') : 'Grammatik · ' + G[s.topic].name;
+  S.store.hist = [{ t: Date.now(), label, ok, n: log.length }].concat(S.store.hist).slice(0, 30); persist();
+  s.log = log; s.done = true; go('result');
+}
+function judge(s, it, val) {
+  if (s.kind === 'w') { const v = wn(val); return !!v && wAns(it, s.fmt).includes(v); }
+  const v = gn(val); return !!v && it.a.map(gn).includes(v);
+}
+function answer(ok, val) {
+  const s = S.sess; if (s.checked) return; const it = s.items[s.i];
+  record(s.kind === 'w' ? it.fr : s.topic, ok, s.kind);
+  s.log.push({ ok, it, val }); s.checked = true; s.ok = ok; s.val = val; render();
+}
+function check() { const s = S.sess; if (!s || s.checked) return; const el = document.getElementById('ans'); if (!el || !el.value.trim()) return; answer(judge(s, s.items[s.i], el.value), el.value); }
+function next() {
+  const s = S.sess; const i = s.i + 1;
+  if (i >= s.items.length) return finish(s.log);
+  s.i = i; s.checked = false; s.ok = null; s.flipped = false; s.val = null; render();
+}
+function cardNext(ok) {
+  const s = S.sess; record(s.items[s.i].fr, ok, 'w'); s.log.push({ ok, it: s.items[s.i] });
+  const i = s.i + 1; if (i >= s.items.length) return finish(s.log);
+  s.i = i; s.flipped = false; render();
+}
+function retry() {
+  const s = S.sess; s.items = s.log.filter(x => !x.ok).map(x => x.it); s.i = 0; s.checked = false; s.ok = null; s.flipped = false; s.log = []; s.done = false; s.val = null; go('play');
+}
+
+/* ---------- views ---------- */
+const btn = (a, v, label, cls) => '<button class="btn ' + (cls || '') + '" data-a="' + a + '"' + (v !== undefined ? ' data-v="' + esc(v) + '"' : '') + '>' + label + '</button>';
+
+function vHome() {
+  const w = S.store.words;
+  const errN = WORDS.filter(x => w[x.fr] && w[x.fr].last === 0).length;
+  const mastered = WORDS.filter(x => { const r = w[x.fr]; return r && r.ok - r.bad >= 2; }).length;
+  return '<div class="col" style="gap:28px">' +
+    '<div class="col" style="gap:8px;padding-top:20px"><h6 class="acc">' + esc(KICKER) + '</h6><h1>' + esc(GREETING) + '</h1><div class="sp" style="margin-top:12px"></div></div>' +
+    '<div class="grid">' +
+      '<div class="card col" style="align-items:flex-start;padding:28px"><span style="font-size:28px;line-height:1">🃏</span><h3>Wortschatz</h3><p class="mute">' + WORDS.length + ' Wörter · ' + mastered + ' gelernt</p>' + btn('wsetup', undefined, 'Üben →', 'pri') + '</div>' +
+      '<div class="card col" style="align-items:flex-start;padding:28px"><span style="font-size:28px;line-height:1">✏️</span><h3>Grammatik</h3><p class="mute">' + esc(GRAMMAR_SUB) + '</p>' + btn('gsetup', undefined, 'Üben →', 'pri') + '</div>' +
+    '</div>' +
+    '<div class="row">' + (errN ? btn('start-err', undefined, '↺ ' + errN + ' Fehlerwörter wiederholen') : '') + btn('parent', undefined, '📊 Elternbereich', 'ghost') + '</div>' +
+  '</div>';
+}
+function vWSetup() {
+  const w = S.store.words;
+  const errN = WORDS.filter(x => w[x.fr] && w[x.fr].last === 0).length;
+  const srcs = ['all'].concat(SRCK).concat(errN ? ['err'] : []);
+  const total = pool(S.wSrc, S.wFmt).length;
+  const counts = [10, 15, 30, 999];
+  return '<div class="col" style="gap:24px;padding-top:8px">' + btn('home', undefined, '← Zurück', 'ghost') + '<h2>Wortschatz</h2>' +
+    '<div class="col" style="gap:10px"><h6>Welche Wörter</h6><div class="row">' + srcs.map(k => btn('wsrc', k, k === 'err' ? 'Fehlerwörter (' + errN + ')' : SRC[k], S.wSrc === k ? 'sel' : '')).join('') + '</div></div>' +
+    '<div class="col" style="gap:10px"><h6>Aufgabenform</h6><div class="row">' + Object.keys(FMT).map(k => btn('wfmt', k, FMT[k], S.wFmt === k ? 'sel' : '')).join('') + '</div><p class="hint">' + FMTHINT[S.wFmt] + '</p></div>' +
+    '<div class="col" style="gap:10px"><h6>Wörter pro Runde</h6><div class="row">' + counts.map(n => btn('wn', n, n === 999 ? 'Alle Wörter (' + total + ')' : n, S.wN === n ? 'sel' : '')).join('') + '</div><p class="hint">Mit „Alle Wörter“ übst du den ganzen Bereich in einer Runde. Neue und falsch beantwortete Wörter kommen zuerst.</p></div>' +
+    '<div>' + btn('start-w', undefined, 'Starten · ' + Math.min(S.wN, total) + ' Wörter →', 'pri') + '</div></div>';
+}
+function vGSetup() {
+  return '<div class="col" style="gap:24px;padding-top:8px">' + btn('home', undefined, '← Zurück', 'ghost') + '<h2>Grammatik</h2><div class="col" style="gap:12px">' +
+    Object.keys(G).map(k => { const r = S.store.gram[k]; return '<button class="card topic" data-a="start-g" data-v="' + k + '"><b>' + esc(G[k].name) + '</b><span>' + esc(G[k].sub) + (r ? ' · ' + acc(r) : '') + '</span></button>'; }).join('') +
+    '</div></div>';
+}
+function vBars() {
+  const s = S.sess; const w = s.kind === 'w'; const log = s.log;
+  const okN = log.filter(x => x.ok).length, badN = log.length - okN, m = Math.max(okN, badN, 1);
+  const lab = x => w ? x.it.fr : x.it.s.split(' ___')[0];
+  return '<div class="bars">' + [['ok', 'richtig', okN, 'var(--accent)', 'var(--accent-l)', 'Richtig beantwortet'], ['bad', 'falsch', badN, 'var(--bad)', '#cfd3e5', 'Falsch beantwortet']].map(([k, label, n, color, nc, title]) => {
+    const ws = log.filter(x => (k === 'ok') === !!x.ok).map(lab);
+    return '<div class="bar" data-a="bar" data-v="' + k + '"><div class="pop' + (S.open === k ? ' on' : '') + '"><h6>' + title + '</h6>' + (ws.length ? ws.map(x => '<div>' + esc(x) + '</div>').join('') : '<div class="mute">Noch keine</div>') + '</div>' +
+      '<span class="n" style="color:' + nc + '">' + n + '</span><div class="b" style="height:' + Math.round(n / m * 80) + 'px;background:' + color + '"></div><span class="l">' + label + '</span></div>';
+  }).join('') + '</div>';
+}
+function vPlay() {
+  const s = S.sess; const it = s.items[s.i]; const w = s.kind === 'w';
+  const cards = w && s.fmt === 'cards', fill = w && s.fmt === 'fill', choice = !w && !!it.o, gtyped = !w && !it.o;
+  const typed = (w && !cards) || gtyped;
+  let h = '<div class="col" style="gap:28px;padding-top:8px">';
+  h += '<div class="top">' + btn('quit', undefined, '✕ Zum Menü') + '<div class="prog"><i style="width:' + Math.round(s.i / s.items.length * 100) + '%"></i></div><span class="mute" style="font-size:13px;min-width:48px;text-align:right">' + (s.i + 1) + ' / ' + s.items.length + '</span></div>';
+  h += '<div class="col" style="gap:20px;min-height:260px"><h6 class="acc">' + (w ? (cards ? 'Wort' : fill ? 'Lückensatz' : LANGDE + ' eintippen') : esc(G[s.topic].name)) + '</h6>';
+  if (w) h += '<div class="main">' + esc(it.de) + '</div>';
+  if (cards) {
+    if (s.flipped) {
+      h += '<div class="card col" style="gap:10px"><div class="back">' + esc(it.fr) + '</div>' + (it.ex ? '<div style="font-size:18px">' + esc(it.ex) + '</div>' : '') + (it.exde ? '<div class="mute">' + esc(it.exde) + '</div>' : '') + (it.note ? '<div class="note">' + esc(it.note) + '</div>' : '') + '</div>' +
+        '<div class="row">' + btn('know', undefined, '✓ Gewusst', 'pri') + btn('notyet', undefined, '↺ Noch nicht') + '</div>';
+    } else h += '<div>' + btn('flip', undefined, 'Umdrehen') + '</div>';
+  }
+  if (typed) {
+    const dis = s.checked ? ' disabled' : '';
+    let pre = '', post = '';
+    if (fill) { pre = it.before.trim(); post = it.after.trim(); } else if (gtyped) { const gs = it.s.split('___'); pre = gs[0].trim(); post = (gs[1] || '').trim(); }
+    h += '<div class="sent">' + (pre ? '<span>' + esc(pre) + '</span>' : '') +
+      '<input id="ans" class="input' + (fill || gtyped ? ' sm' : '') + '" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="' + (fill || gtyped ? '…' : PH) + '" value="' + esc(s.val || '') + '"' + dis + '>' +
+      (post ? '<span>' + esc(post) + '</span>' : '') + '</div>';
+    if (!s.checked && CHARS.length) h += '<div class="row" style="gap:8px">' + CHARS.map(c => '<button class="btn key" data-a="char" data-v="' + c + '">' + c + '</button>').join('') + '</div>';
+  }
+  if (choice) {
+    const gs = it.s.split('___');
+    h += '<div class="main">' + esc(gs[0].trim()) + ' ___ ' + esc((gs[1] || '').trim()) + '</div><div class="col" style="gap:10px;max-width:420px">' +
+      it.o.map((o, idx) => { let st = ''; if (s.checked) { if (o === it.a[0]) st = 'background:var(--accent-d);border-color:var(--accent)'; else if (o === s.val) st = 'opacity:.5;text-decoration:line-through'; else st = 'opacity:.45'; } return '<button class="btn opt" style="' + st + '" data-a="choice" data-v="' + idx + '">' + esc(o) + '</button>'; }).join('') + '</div>';
+  }
+  if (s.checked && !cards) {
+    const correct = w ? (fill && it.gap ? it.gap : it.fr) : it.a.join(' / ');
+    const txt = s.ok ? (w && it.ex ? it.fr + ' · ' + it.ex : '') : 'Richtig: ' + correct + (w && it.note ? ' · ' + it.note : '');
+    h += '<div class="fb" style="box-shadow:0 0 0 1px ' + (s.ok ? 'var(--accent)' : 'var(--mute)') + '"><span class="ic" style="color:' + (s.ok ? 'var(--accent)' : 'var(--mute)') + '">' + (s.ok ? '✓' : '✗') + '</span><div><div style="font-weight:600">' + (s.ok ? 'Richtig' : 'Nicht ganz') + '</div>' + (txt ? '<div style="color:#cfd3e5">' + esc(txt) + '</div>' : '') + '</div></div>';
+  }
+  h += '</div>';
+  if (typed && !s.checked) h += '<div>' + btn('check', undefined, 'Prüfen', 'pri') + '</div>';
+  if (s.checked && !cards) h += '<div>' + btn('next', undefined, (s.i + 1 >= s.items.length ? 'Ergebnis' : 'Weiter') + ' →', 'pri') + '</div>';
+  h += vBars() + '</div>';
+  return h;
+}
+function vResult() {
+  const s = S.sess; const ok = s.log.filter(x => x.ok).length, n = s.log.length, bad = s.log.filter(x => !x.ok); const w = s.kind === 'w';
+  return '<div class="col" style="gap:24px;padding-top:20px"><h6 class="acc">' + (w ? 'Wortschatz' : esc(G[s.topic].name)) + '</h6>' +
+    '<div class="row" style="align-items:baseline;gap:14px"><span class="score">' + ok + '</span><span class="mute" style="font-size:22px">/ ' + n + '</span></div>' +
+    '<p style="color:#cfd3e5">' + (ok === n ? 'Alles richtig.' : ok / n >= 0.7 ? 'Gut. Die Fehler unten kurz wiederholen.' : 'Die Fehler unten noch einmal üben.') + '</p>' +
+    (bad.length ? '<div class="card col" style="gap:10px"><h6>Zum Wiederholen</h6>' + bad.map(x => '<div class="mr"><span>' + esc(w ? x.it.de : x.it.s) + '</span><span>' + esc(w ? x.it.fr : x.it.a[0]) + '</span></div>').join('') + '</div>' : '') +
+    '<div class="row">' + (bad.length ? btn('retry', undefined, '↺ Fehler wiederholen', 'pri') : '') + btn('again', undefined, 'Neue Runde') + btn('home', undefined, 'Zum Menü', 'ghost') + '</div></div>';
+}
+function vParent() {
+  const st = S.store;
+  const rows = SRCK.map(u => { const ws = WORDS.filter(x => x.u === u); let ok = 0, bad = 0, m = 0; ws.forEach(x => { const r = st.words[x.fr]; if (r) { ok += r.ok; bad += r.bad; if (r.ok - r.bad >= 2) m++; } }); return '<tr><td>' + esc(SRC[u]) + '</td><td>' + ws.length + '</td><td>' + m + '</td><td>' + acc({ ok, bad }) + '</td></tr>'; }).join('');
+  const gram = Object.keys(G).map(k => { const r = st.gram[k] || { ok: 0, bad: 0 }; return '<tr><td>' + esc(G[k].name) + '</td><td>' + (r.ok + r.bad) + '</td><td>' + acc(r) + '</td></tr>'; }).join('');
+  const weak = WORDS.filter(x => { const r = st.words[x.fr]; return r && r.bad > 0 && r.bad >= r.ok; }).slice(0, 20);
+  const hist = st.hist.slice(0, 8);
+  return '<div class="col" style="gap:28px;padding-top:8px">' + btn('home', undefined, '← Zurück', 'ghost') + '<h2>Elternbereich</h2>' +
+    '<div class="col" style="gap:10px"><h6>Wortschatz</h6><table><thead><tr><th>Bereich</th><th>Wörter</th><th>Gelernt</th><th>Trefferquote</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+    '<div class="col" style="gap:10px"><h6>Grammatik</h6><table><thead><tr><th>Thema</th><th>Aufgaben</th><th>Trefferquote</th></tr></thead><tbody>' + gram + '</tbody></table></div>' +
+    '<div class="col" style="gap:10px"><h6>Schwierige Wörter</h6>' + (weak.length ? '<div class="row" style="gap:8px">' + weak.map(x => '<span class="tag">' + esc(x.fr) + '</span>').join('') + '</div>' : '<p class="mute">Noch keine Fehler erfasst.</p>') + '</div>' +
+    '<div class="col" style="gap:10px"><h6>Letzte Runden</h6>' + (hist.length ? '<table><tbody>' + hist.map(h => '<tr><td>' + new Date(h.t).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }) + '</td><td>' + esc(h.label) + '</td><td>' + h.ok + ' / ' + h.n + '</td></tr>').join('') + '</tbody></table>' : '<p class="mute">Noch keine Runden.</p>') + '</div>' +
+    '<div>' + btn('reset', undefined, '🗑 Ergebnisse zurücksetzen', 'ghost') + '</div></div>';
+}
+function render() {
+  const v = { home: vHome, wsetup: vWSetup, gsetup: vGSetup, play: vPlay, result: vResult, parent: vParent }[S.screen];
+  document.getElementById('app').innerHTML = v();
+  const el = document.getElementById('ans'); if (el && !el.disabled) el.focus();
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-a]'); if (!t) return;
+  const a = t.dataset.a, v = t.dataset.v, s = S.sess;
+  switch (a) {
+    case 'home': case 'wsetup': case 'gsetup': case 'parent': return go(a);
+    case 'quit': return go('home');
+    case 'wsrc': S.wSrc = v; return render();
+    case 'wfmt': S.wFmt = v; return render();
+    case 'wn': S.wN = +v; return render();
+    case 'start-w': return startW();
+    case 'start-g': return startG(v);
+    case 'start-err': S.wSrc = 'err'; return startW('err', 'type');
+    case 'flip': s.flipped = true; return render();
+    case 'know': return cardNext(true);
+    case 'notyet': return cardNext(false);
+    case 'check': return check();
+    case 'next': return next();
+    case 'choice': { const it = s.items[s.i]; const o = it.o[+v]; return answer(o === it.a[0], o); }
+    case 'char': { const el = document.getElementById('ans'); if (el && !el.disabled) { el.value += v; el.focus(); } return; }
+    case 'bar': S.open = S.open === v ? null : v; return render();
+    case 'retry': return retry();
+    case 'again': return s.kind === 'w' ? startW(s.src, s.fmt) : startG(s.topic);
+    case 'reset': if (confirm('Alle gespeicherten Ergebnisse löschen?')) { S.store = { words: {}, gram: {}, hist: [] }; persist(); render(); } return;
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || S.screen !== 'play' || !S.sess) return;
+  if (S.sess.checked) { e.preventDefault(); next(); }
+  else if (e.target && e.target.id === 'ans') check();
+});
+render();
+</script>
+</body>
+</html>
